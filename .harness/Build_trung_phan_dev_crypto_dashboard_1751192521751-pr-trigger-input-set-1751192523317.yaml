@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_trung_phan_dev_crypto_dashboard_1751192521751-pr-trigger-input-set
+  identifier: Build_trung_phan_dev_crypto_dashboard_1751192521751prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: default_project
+  pipeline:
+    identifier: Build_trung_phan_dev_crypto_dashboard_1751192521751
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
