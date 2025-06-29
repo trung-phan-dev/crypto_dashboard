@@ -1,0 +1,35 @@
+pipeline:
+  name: Crypto Dashboard Deploy
+  identifier: crypto_dashboard_deploy
+  projectIdentifier: default
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Build and Deploy
+        identifier: build_deploy
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: crypto_dashboard_service
+          environment:
+            environmentRef: production
+          execution:
+            steps:
+              - step:
+                  name: Build Docker Image
+                  identifier: build_image
+                  type: BuildAndPushDockerRegistry
+                  spec:
+                    connectorRef: docker_hub
+                    repo: <your-repo>/crypto-dashboard
+                    tags:
+                      - latest
+                      - <+pipeline.sequenceId>
+              - step:
+                  name: Deploy to K8s
+                  identifier: deploy_k8s
+                  type: K8sRollingDeploy
+                  spec:
+                    skipDryRun: false

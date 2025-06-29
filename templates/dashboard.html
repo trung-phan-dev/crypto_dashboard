@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Broker Terminal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/chart-zoom.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="terminal">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-chart-line"></i>
+                <span>CRYPTO TERMINAL</span>
+            </div>
+            <div class="nav-stats">
+                <div class="market-stat" id="totalMarketCap">
+                    <span class="label">Market Cap</span>
+                    <span class="value">Loading...</span>
+                </div>
+                <div class="market-stat" id="fearGreedIndex">
+                    <span class="label">Fear & Greed</span>
+                    <span class="value">Loading...</span>
+                </div>
+                <div class="market-stat" id="btcDominance">
+                    <span class="label">BTC Dominance</span>
+                    <span class="value">Loading...</span>
+                </div>
+                <div class="market-stat" id="volatilityIndex">
+                    <span class="label">VIX Crypto</span>
+                    <span class="value">Loading...</span>
+                </div>
+                <div class="market-stat">
+                    <span class="label">Status</span>
+                    <span class="value live">● LIVE</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="dashboard-grid">
+            <div class="panel watchlist">
+                <div class="panel-header">
+                    <h3><i class="fas fa-eye"></i> PORTFOLIO MONITOR</h3>
+                    <div class="panel-controls">
+                        <select id="portfolioFilter" class="filter-select">
+                            <option value="all">All Assets (1000+)</option>
+                            <option value="top-100">Top 100</option>
+                            <option value="large-cap">Large Cap (>$10B)</option>
+                            <option value="mid-cap">Mid Cap ($1B-$10B)</option>
+                            <option value="small-cap">Small Cap (<$1B)</option>
+                            <option value="meme">Meme Coins</option>
+                            <option value="defi">DeFi Tokens</option>
+                        </select>
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search coins..." oninput="searchCoins()">
+                        <span class="refresh-indicator" id="refreshIndicator">●</span>
+                    </div>
+                </div>
+                <div class="crypto-table" id="cryptoTable">
+                    <!-- Crypto table will be populated here -->
+                </div>
+            </div>
+
+            <div class="panel chart-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-chart-area"></i> TECHNICAL ANALYSIS</h3>
+                    <div class="chart-controls">
+                        <button class="expand-btn" onclick="openChartModal()"><i class="fas fa-external-link-alt"></i> EXPAND</button>
+                    </div>
+                </div>
+                <canvas id="priceChart"></canvas>
+            </div>
+
+            <div class="panel chart-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-chart-pie"></i> MARKET DOMINANCE</h3>
+                </div>
+                <canvas id="dominanceChart"></canvas>
+            </div>
+
+            <div class="panel chart-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-chart-bar"></i> VOLUME ANALYSIS</h3>
+                </div>
+                <canvas id="volumeChart"></canvas>
+            </div>
+
+            <div class="panel heatmap-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-fire"></i> VOLATILITY MATRIX</h3>
+                </div>
+                <div class="heatmap-grid" id="heatmapGrid">
+                    <!-- Heatmap will be populated here -->
+                </div>
+            </div>
+
+            <div class="panel movers-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-rocket"></i> TOP MOVERS</h3>
+                </div>
+                <div class="movers-container" id="moversContainer">
+                    <!-- Market movers will be populated here -->
+                </div>
+            </div>
+
+            <div class="panel liquidity-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-tint"></i> LIQUIDITY MONITOR</h3>
+                </div>
+                <div class="liquidity-list" id="liquidityList">
+                    <!-- Liquidity metrics will be populated here -->
+                </div>
+            </div>
+
+            <div class="panel alerts-panel">
+                <div class="panel-header">
+                    <h3><i class="fas fa-bell"></i> RISK ALERTS</h3>
+                </div>
+                <div class="alerts-list" id="alertsList">
+                    <!-- Alerts will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart Modal -->
+    <div id="chartModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-area"></i> TECHNICAL ANALYSIS - EXPANDED VIEW</h3>
+                <div class="modal-controls">
+                    <button class="close-btn" onclick="closeChartModal()"><i class="fas fa-times"></i> CLOSE</button>
+                </div>
+            </div>
+            <div class="modal-chart-container">
+                <canvas id="modalPriceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
